@@ -13,5 +13,5 @@ root_dir = os.path.normpath(
 sys.path.insert(0, root_dir)
 
 from pythonwarrior import runner
-runner = runner.Runner()
+runner = runner.Runner(sys.argv, sys.stdin, sys.stdout)
 runner.run()
