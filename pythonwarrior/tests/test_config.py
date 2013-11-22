@@ -20,3 +20,14 @@ class TestConfig(unittest.TestCase):
         self.assertEquals(None, Config.practice_level)
         self.assertEquals(None, Config.path_prefix)
         self.assertEquals(None, Config.skip_input)
+
+    def test_get_returns_class_attributes(self):
+        Config.foo = 'bar'
+        self.assertEquals('bar', Config.get('foo'))
+        delattr(Config, 'foo')
+
+    def test_get_returns_default_values_if_not_set(self):
+        Config.foo = None
+        Config._defaults['foo'] = 'baz'
+        self.assertEquals('baz', Config.get('foo'))
+        delattr(Config, 'foo')
