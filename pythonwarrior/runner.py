@@ -1,14 +1,15 @@
 import argparse
+import sys
 
 from pythonwarrior.config import Config
 from pythonwarrior.game import Game
 
 
 class Runner(object):
-    def __init__(self, arguments, stdin, stdout):
+    def __init__(self, arguments, stdin=None, stdout=None):
         self.arguments = arguments[1:]  # skip program name
-        self.stdin = stdin
-        self.stdout = stdout
+        self.stdin = stdin or sys.stdin
+        self.stdout = stdout or sys.stdout
         self.game = Game()
 
     def run(self):
