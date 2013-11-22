@@ -1,8 +1,7 @@
 import argparse
 import sys
 
-from pythonwarrior.config import Config
-from pythonwarrior.game import Game
+import pythonwarrior
 
 
 class Runner(object):
@@ -10,12 +9,12 @@ class Runner(object):
         self.arguments = arguments[1:]  # skip program name
         self.stdin = stdin or sys.stdin
         self.stdout = stdout or sys.stdout
-        self.game = Game()
+        self.game = pythonwarrior.Game()
 
     def run(self):
-        Config.in_stream = self.stdin
-        Config.out_stream = self.stdout
-        Config.delay = 0.6
+        pythonwarrior.Config.in_stream = self.stdin
+        pythonwarrior.Config.out_stream = self.stdout
+        pythonwarrior.Config.delay = 0.6
         self.parse_options()
         self.game.start()
 
@@ -33,10 +32,10 @@ class Runner(object):
         args = parser.parse_args(self.arguments)
 
         if args.directory:
-            Config.path_prefix = args.directory
+            pythonwarrior.Config.path_prefix = args.directory
         if args.level:
-            Config.practice_level = args.level
+            pythonwarrior.Config.practice_level = args.level
         if args.skip:
-            Config.skip_input = args.skip
+            pythonwarrior.Config.skip_input = args.skip
         if args.time:
-            Config.delay = args.time
+            pythonwarrior.Config.delay = args.time
