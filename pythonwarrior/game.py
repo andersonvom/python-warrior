@@ -4,6 +4,7 @@ import sys
 
 from config import Config
 from profile import Profile
+from tower import Tower
 from ui import UI
 
 
@@ -68,4 +69,8 @@ class Game(object):
     # TOWERS
 
     def towers(self):
-        pass
+        return map(Tower.__initialize__, self.tower_paths())
+
+    def tower_paths(self):
+        location = '../../../towers/*'
+        return glob.glob(location)

@@ -88,3 +88,27 @@ class TestGame(unittest.TestCase):
         profile = self.game.new_profile()
         self.assertEquals('tower_path', profile.tower_path)
         self.assertEquals('name', profile.warrior_name)
+
+    # TOWERS
+
+    @mock.patch.object(pythonwarrior.Tower, '__initialize__')
+    def test_load_towers_for_each_tower_path(self, mock_init):
+        def mock_new(arg):
+            return {
+                'towers/foo': 1,
+                'towers/bar': 2,
+            }[arg]
+
+        mock_init.side_effect = mock_new
+        tower_paths = ['towers/foo', 'towers/bar']
+        self.game.tower_paths = mock.Mock(return_value=tower_paths)
+
+        towers = self.game.towers()
+        self.assertIn(1, towers)
+        self.assertIn(1, towers)
+        self.assertEquals(2, len(towers))
+
+    @mock.patch.object(glob, 'glob')
+    def test_find_tower_paths(self, mock_glob):
+        self.game.tower_paths()
+        mock_glob.assert_called_once_with('../../../towers/*')
