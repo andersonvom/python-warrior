@@ -7,6 +7,9 @@ class Profile(object):
     def __initialize__(self):
         pass
 
+    def calculate_average_grade(self):
+        pass
+
     @classmethod
     def load(cls, profile):
         pass

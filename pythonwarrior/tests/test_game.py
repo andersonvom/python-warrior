@@ -112,3 +112,60 @@ class TestGame(unittest.TestCase):
     def test_find_tower_paths(self, mock_glob):
         self.game.tower_paths()
         mock_glob.assert_called_once_with('../../../towers/*')
+
+    # LEVEL
+
+    def test_fetch_current_level_from_profile_and_cache_it(self):
+        profile = mock.Mock()
+        profile.current_level.return_value = 'foo'
+        self.game.profile = mock.Mock(return_value=profile)
+
+        self.assertEquals('foo', self.game.current_level())
+        profile.current_level.return_value = 'not foo'
+        self.assertEquals('foo', self.game.current_level())
+
+    def test_fetch_next_level_from_profile_and_cache_it(self):
+        profile = mock.Mock()
+        profile.next_level.return_value = 'foo'
+        self.game.profile = mock.Mock(return_value=profile)
+
+        self.assertEquals('foo', self.game.next_level())
+        profile.next_level.return_value = 'not foo'
+        self.assertEquals('foo', self.game.next_level())
+
+    @mock.patch.object(pythonwarrior.Level, 'grade_letter')
+    def test_reports_final_grade(self, mock_grade_letter):
+        def _mock_grade_letter(arg):
+            return {
+                '0.7': 'C',
+                '0.8': 'B',
+                '0.9': 'A',
+            }[str(arg)]
+
+        mock_grade_letter.side_effect = _mock_grade_letter
+        profile = mock.Mock()
+        profile.current_epic_grades = {1: 0.7, 2: 0.9}
+        profile.calculate_average_grade.return_value = 0.8
+        self.game.profile = mock.Mock(return_value=profile)
+
+        report = self.game.final_report()
+        self.assertIn("Your average grade for this tower is: B", report)
+        self.assertIn("Level 1: C", report)
+        self.assertIn("Level 2: A", report)
+
+    def test_final_report_is_empty_if_no_epic_grades(self):
+        profile = mock.Mock()
+        profile.calculate_average_grade.return_value = None
+        self.game.profile = mock.Mock(return_value=profile)
+
+        self.assertEquals('', self.game.final_report())
+
+    @mock.patch.object(pythonwarrior.Config, 'practice_level')
+    def test_final_report_is_emtpy_if_practice_level(self, mock_level):
+        pythonwarrior.Config.practice_level = 2
+        profile = mock.Mock()
+        profile.current_epic_grades = {1: 0.7, 2: 0.9}
+        profile.calculate_average_grade.return_value = 0.8
+        self.game.profile = mock.Mock(return_value=profile)
+
+        self.assertEquals('', self.game.final_report())

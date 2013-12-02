@@ -3,6 +3,7 @@ import os
 import sys
 
 from config import Config
+from level import Level
 from profile import Profile
 from tower import Tower
 from ui import UI
@@ -11,6 +12,8 @@ from ui import UI
 class Game(object):
 
     _profile = None
+    _current_level = None
+    _next_level = None
 
     def start(self):
         print 'Game started'
@@ -74,3 +77,34 @@ class Game(object):
     def tower_paths(self):
         location = '../../../towers/*'
         return glob.glob(location)
+
+    # LEVELS
+
+    def current_level(self):
+        if not self._current_level:
+            self._current_level = self.profile().current_level()
+
+        return self._current_level
+
+    def next_level(self):
+        if not self._next_level:
+            self._next_level = self.profile().next_level()
+
+        return self._next_level
+
+    def final_report(self):
+        report = ""
+        average_grade = self.profile().calculate_average_grade()
+        if average_grade and not Config.get('practice_level'):
+            report += "Your average grade for this tower is: %s\n\n" % \
+                      Level.grade_letter(average_grade)
+            levels = self.profile().current_epic_grades.keys()
+            for level in sorted(levels):
+                grade = self.profile().current_epic_grades[level]
+                grade_letter = Level.grade_letter(grade)
+                report += "Level %s: %s\n" % (level, grade_letter)
+
+            report += "\nTo practice a level, use -l option\n\n"
+            report += "pythonwarrior -l 3"
+
+        return report
