@@ -4,11 +4,11 @@ class UI(object):
         pass
 
     @classmethod
-    def gets(cls):
+    def readline(cls):
         pass
 
     @classmethod
-    def puts(cls, message):
+    def writeline(cls, message):
         pass
 
     @classmethod

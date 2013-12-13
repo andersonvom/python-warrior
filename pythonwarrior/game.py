@@ -24,7 +24,7 @@ class Game(object):
         if UI.ask(question):
             os.makedirs(Config.get('path_prefix') + '/pythonwarrior')
         else:
-            UI.puts("Unable to continue without a directory.")
+            UI.writeline("Unable to continue without a directory.")
             sys.exit(1)
 
     # PROFILES
@@ -53,9 +53,9 @@ class Game(object):
         replace_question = "Are you sure you want to replace your " \
                            "existing profile for this tower?"
         if UI.ask(replace_question):
-            UI.puts("Replacing existing profile")
+            UI.writeline("Replacing existing profile")
         else:
-            UI.puts("Not replacing profile.")
+            UI.writeline("Not replacing profile.")
             sys.exit(1)
 
     def _choose_profile(self):

@@ -68,10 +68,10 @@ class TestGame(unittest.TestCase):
         mock_choose.assert_called_once()
 
     @mock.patch.object(pythonwarrior.UI, 'choose')
-    @mock.patch.object(pythonwarrior.UI, 'gets')
-    def test_asks_user_to_choose_tower_on_new_profile(self, mock_gets,
+    @mock.patch.object(pythonwarrior.UI, 'readline')
+    def test_asks_user_to_choose_tower_on_new_profile(self, mock_readline,
                                                       mock_choose):
-        mock_gets.return_value = ''
+        mock_readline.return_value = ''
         self.game.towers = mock.Mock(return_value=['t1', 't2'])
         fake_tower = mock.Mock()
         fake_tower.path = '/foo/bar'
