@@ -91,7 +91,7 @@ class TestGame(unittest.TestCase):
 
     # TOWERS
 
-    @mock.patch.object(pythonwarrior.Tower, '__initialize__')
+    @mock.patch.object(pythonwarrior.Tower, '__init__')
     def test_load_towers_for_each_tower_path(self, mock_init):
         def mock_new(arg):
             return {

@@ -72,10 +72,10 @@ class Game(object):
     # TOWERS
 
     def towers(self):
-        return map(Tower.__initialize__, self.tower_paths())
+        return map(Tower, self.tower_paths())
 
     def tower_paths(self):
-        location = '../../../towers/*'
+        location = 'towers/*'
         return glob.glob(location)
 
     # LEVELS

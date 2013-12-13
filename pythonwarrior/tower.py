@@ -1,4 +1,5 @@
 class Tower(object):
 
-    def __initialize__(self):
-        pass
+    def __init__(self, tower):
+        self.path = tower
+        print "TODO: Tower#__init__"
