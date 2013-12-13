@@ -11,39 +11,43 @@ class TestRunner(unittest.TestCase):
         pythonwarrior.Config.reset()
         self.runner = Runner([])
 
-    def test___init__defaults_to_stdin_and_stdout(self):
+    def test_init_defaults_to_stdin_and_stdout(self):
         self.assertEquals(sys.stdin, self.runner.stdin)
         self.assertEquals(sys.stdout, self.runner.stdout)
 
-    def test___init__accepts_different_in_out_streams(self):
+    def test_init_accepts_different_in_out_streams(self):
         self.runner = Runner([], 'fake stdin', 'fake stdout')
 
         self.assertEquals('fake stdin', self.runner.stdin)
         self.assertEquals('fake stdout', self.runner.stdout)
 
-    def test___init___accepts_command_line_arguments(self):
+    def test_init_accepts_command_line_arguments(self):
         self.runner = Runner(['pythonwarrior', 'fakearg'])
 
         self.assertEquals(['fakearg'], self.runner.arguments)
         self.assertEquals(True,
                           isinstance(self.runner.game, pythonwarrior.Game))
 
-    def test___init___creates_a_new_game(self):
+    def test_init_creates_a_new_game(self):
         self.assertEquals(True,
                           isinstance(self.runner.game, pythonwarrior.Game))
 
     def test_run_parses_command_line_options(self):
         self.runner.parse_options = mock.Mock()
+        self.runner.game = mock.Mock()
         self.runner.run()
 
         self.runner.parse_options.assert_called_once_with()
 
     def test_run_sets_up_config_options(self):
-        self.runner = Runner([], 'fake stdin', 'fake stdout')
+        fake_in = mock.Mock()
+        fake_out = mock.Mock()
+        self.runner = Runner([], fake_in, fake_out)
+        self.runner.game = mock.Mock()
         self.runner.run()
 
-        self.assertEquals('fake stdin', pythonwarrior.Config.in_stream)
-        self.assertEquals('fake stdout', pythonwarrior.Config.out_stream)
+        self.assertEquals(fake_in, pythonwarrior.Config.in_stream)
+        self.assertEquals(fake_out, pythonwarrior.Config.out_stream)
         self.assertEquals(0.6, pythonwarrior.Config.delay)
 
     def test_run_starts_the_game(self):

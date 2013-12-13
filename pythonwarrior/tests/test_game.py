@@ -67,23 +67,20 @@ class TestGame(unittest.TestCase):
         self.game.profile()
         mock_choose.assert_called_once()
 
-    @mock.patch.object(pythonwarrior.UI, 'choose')
-    @mock.patch.object(pythonwarrior.UI, 'readline')
-    def test_asks_user_to_choose_tower_on_new_profile(self, mock_readline,
-                                                      mock_choose):
-        mock_readline.return_value = ''
+    @mock.patch.object(pythonwarrior.game, 'UI')
+    def test_asks_user_to_choose_tower_on_new_profile(self, mock_ui):
         self.game.towers = mock.Mock(return_value=['t1', 't2'])
         fake_tower = mock.Mock()
         fake_tower.path = '/foo/bar'
+        mock_ui.choose.return_value = fake_tower
 
         self.game.new_profile()
-        mock_choose.assert_called_once_with('tower', ['t1', 't2'])
+        mock_ui.choose.assert_called_once_with('tower', ['t1', 't2'])
 
-    @mock.patch.object(pythonwarrior.UI, 'request')
-    @mock.patch.object(pythonwarrior.UI, 'choose')
-    def test_pass_name_and_tower_to_profile(self, mock_choose, mock_request):
-        mock_choose.return_value = mock.Mock(path='tower_path')
-        mock_request.return_value = 'name'
+    @mock.patch.object(pythonwarrior.game, 'UI')
+    def test_pass_name_and_tower_to_profile(self, mock_ui):
+        mock_ui.choose.return_value = mock.Mock(path='tower_path')
+        mock_ui.request.return_value = 'name'
 
         profile = self.game.new_profile()
         self.assertEquals('tower_path', profile.tower_path)
