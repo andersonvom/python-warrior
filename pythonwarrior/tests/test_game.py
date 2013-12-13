@@ -88,15 +88,15 @@ class TestGame(unittest.TestCase):
 
     # TOWERS
 
-    @mock.patch.object(pythonwarrior.Tower, '__init__')
-    def test_load_towers_for_each_tower_path(self, mock_init):
+    @mock.patch.object(pythonwarrior.game, 'Tower')
+    def test_load_towers_for_each_tower_path(self, mock_tower):
         def mock_new(arg):
             return {
                 'towers/foo': 1,
                 'towers/bar': 2,
             }[arg]
 
-        mock_init.side_effect = mock_new
+        mock_tower.side_effect = mock_new
         tower_paths = ['towers/foo', 'towers/bar']
         self.game.tower_paths = mock.Mock(return_value=tower_paths)
 
@@ -108,7 +108,7 @@ class TestGame(unittest.TestCase):
     @mock.patch.object(glob, 'glob')
     def test_find_tower_paths(self, mock_glob):
         self.game.tower_paths()
-        mock_glob.assert_called_once_with('../../../towers/*')
+        mock_glob.assert_called_once_with('towers/*')
 
     # LEVEL
 

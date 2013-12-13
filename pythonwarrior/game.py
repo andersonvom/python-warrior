@@ -16,7 +16,22 @@ class Game(object):
     _next_level = None
 
     def start(self):
-        print 'Game started'
+        UI.writeline("Welcome to Python Warrior")
+
+        profile = Config.get('path_prefix') + '/.profile'
+        game_directory = Config.get('path_prefix') + '/pythonwarrior'
+        if os.path.exists(profile):
+            self._profile = Profile.load(profile)
+        elif not os.path.exists(game_directory):
+            self.make_game_directory()
+
+        if self.profile().epic():
+            if self.profile().level_after_epic():
+                self.go_back_to_normal_mode()
+            else:
+                self.play_epic_mode()
+        else:
+            self.play_normal_mode()
 
     def make_game_directory(self):
         question = "No pythonwarrior directory found. " \
@@ -26,6 +41,9 @@ class Game(object):
         else:
             UI.writeline("Unable to continue without a directory.")
             sys.exit(1)
+
+    def play_normal_mode(self):
+        print "TODO: Game#play_normal_mode"
 
     # PROFILES
 
