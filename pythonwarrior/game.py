@@ -43,7 +43,23 @@ class Game(object):
             sys.exit(1)
 
     def play_normal_mode(self):
-        print "TODO: Game#play_normal_mode"
+        if Config.get('practice_level'):
+            UI.writeline("Unable to practice level while not in epic mode. "
+                         "Remove -l option.")
+        else:
+            if self.current_level().number:
+                self.play_current_level()
+            else:
+                self.prepare_next_level()
+                UI.writeline("First level has been generated. "
+                             "See pythonwarrior/%s/README for instructions." %
+                             self.profile().directory_name)
+
+    def prepare_next_level(self):
+        print "TODO: Game#prepare_next_level"
+
+    def play_current_level(self):
+        print "TODO: Game#play_current_level"
 
     # PROFILES
 

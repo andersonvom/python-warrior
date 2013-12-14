@@ -9,6 +9,39 @@ import pythonwarrior
 class TestGame(unittest.TestCase):
     def setUp(self):
         self.game = pythonwarrior.Game()
+        self.config = pythonwarrior.Config
+        self.config.reset()
+
+    def test_play_normal_mode_exits_if_practicing(self):
+        self.config.practice_level = True
+        self.game.prepare_next_level = mock.Mock()
+        self.game.play_current_level = mock.Mock()
+
+        self.game.play_normal_mode()
+        self.assertEqual(False, self.game.prepare_next_level.called)
+        self.assertEqual(False, self.game.play_current_level.called)
+
+    def test_play_normal_mode_plays_current_level(self):
+        self.config.practice_level = False
+        self.game.prepare_next_level = mock.Mock()
+        self.game.play_current_level = mock.Mock()
+        self.game.current_level = mock.Mock()
+        self.game.current_level.number = 99
+
+        self.game.play_normal_mode()
+        self.assertEqual(False, self.game.prepare_next_level.called)
+        self.assertEqual(True, self.game.play_current_level.called)
+
+    def test_play_normal_mode_prepares_next_level(self):
+        self.config.practice_level = False
+        self.game.prepare_next_level = mock.Mock()
+        self.game.play_current_level = mock.Mock()
+        self.game.current_level = mock.Mock()
+        self.game.current_level.return_value = mock.Mock(number=0)
+
+        self.game.play_normal_mode()
+        self.assertEqual(True, self.game.prepare_next_level.called)
+        self.assertEqual(False, self.game.play_current_level.called)
 
     # GAME DIR
 
